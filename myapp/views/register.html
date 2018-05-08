@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <style type="text/css">
+        .m15{ margin: 15px;}
+        .tc{ text-align: center;font-size: 18px;font-weight: 600;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div>
+        <div>
+                <div>
+                    <p class="tc">注册信息</p>
+                </div>
+                <div class="m15">
+                    <div>
+                        <input type="text" id="username" name="username" placeholder="请输入用户名" required>
+                    </div>
+                </div>
+                <div>
+                    <input type="text" id="password" name="password" placeholder="请输入密码" required>
+                </div>
+        </div>
+            <div>
+                <div>
+                    <input type="text" id="password1" name="password1" placeholder="请再次输入密码" required>
+                </div>
+            </div>
+            <div>
+                <button style="margin-bottom: 20px" type="submit" id="register1">注册</button>
+            </div>
+            <div>
+                <button type="button" id="login1">登录</button>
+            </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<!--<script type="text/javascript" src="javascripts/bootstrap.min.js"></script>-->
+<script type="text/javascript">
+    $(function(){
+        $("#login1").click(function(){
+            window.location.href = '/login';
+        });
+        $("#register1").click(function(){
+//            console.log('hahhah')
+            var username = $("#username").val();
+            var password = $("#password").val();
+            var password1 = $("#password1").val();
+            console.log(username,password,password1)
+            if(password !== password1){
+                $("#password").css("border","1px solid red");
+                $("#password1").css("border","1px solid red");
+            }else if(password === password1){
+                var data = {"uname":username,"upwd":password};
+                console.log('hahhah')
+                $.ajax({
+                    url: '/register',
+                    type: 'post',
+                    data: data,
+                    success: function(data,status){
+                        console.log('hahhhhhhhhh',data);
+                        //用户名已经存在
+                        if(data.status === 1){
+                            $("#username").val('用户名已存在！').css('color','red');
+                            $("#password").val('');
+                            $("#password1").val('');
+                        } else {
+                            window.location.href = '/login?username=' + data.name;
+                        }
+                    },
+                    error: function(data,err){
+                        console.log('aaaaaaaaaaa',data)
+//                        location.href = 'register';
+                    }
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

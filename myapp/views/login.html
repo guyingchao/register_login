@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>登录模块</p>
+<div>
+    <input type="text" id="username" name="username" placeholder="请输入用户名" required>
+</div>
+<div>
+    <input type="text" id="password" name="password" placeholder="请输入密码" required>
+</div>
+<div>
+    <button style="margin-bottom: 20px" type="submit" id="register1">注册</button>
+</div>
+<div>
+    <button type="submit" id="login">登录</button>
+</div>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var url = location.search;
+        var target = url.split('=')[1];
+        $('#username').val(target);
+
+        $('#register1').click(function () {
+            window.location.href='/register'
+        });
+        $('#login').click(function () {
+            var username = $('#username').val();
+            var password = $('#password').val();
+            var data = {"uname":username,"upwd":password};
+            $.ajax({
+                url: '/login',
+                type: 'post',
+                data: data,
+                success: function(data,status){
+                    console.log('login success',data);
+                    if(data.status === 0) {
+                        console.log('login success')
+                    } else if(data.status === -1){
+                        $('#username').val('用户名不存在，请先注册').css('color','red');
+                    }
+                    else {
+                        $('#username').val('用户名和密码不一致').css('color','red');
+                    }
+                },
+                error: function(data,err){
+                    console.log('error',data)
+                }
+            });
+        })
+    })
+</script>
+</body>
+</html>
